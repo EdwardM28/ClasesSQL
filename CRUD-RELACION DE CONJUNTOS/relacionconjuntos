@@ -1,0 +1,68 @@
+-- Tabla "Usuarios"
+CREATE TABLE Usuarios (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    CorreoElectronico VARCHAR(100) NOT NULL,
+    Contrasenia VARCHAR(100) NOT NULL
+);
+
+-- Tabla "Proyectos"
+CREATE TABLE Proyectos (
+    ProjectID INT AUTO_INCREMENT PRIMARY KEY,
+    NombreProyecto VARCHAR(100) NOT NULL,
+    Descripcion VARCHAR(255),
+    FechaInicio DATE,
+    FechaFinalizacion DATE
+);
+
+-- Tabla "Tareas"
+CREATE TABLE Tareas (
+    TaskID INT AUTO_INCREMENT PRIMARY KEY,
+    DescripcionTarea VARCHAR(255) NOT NULL,
+    FechaCreacion DATE NOT NULL,
+    FechaVencimiento DATE,
+    Estado ENUM('Pendiente', 'En Progreso', 'Completada') DEFAULT 'Pendiente',
+    ProjectID INT,
+    FOREIGN KEY (ProjectID) REFERENCES Proyectos(ProjectID)
+);
+
+-- Tabla "Comentarios"
+CREATE TABLE Comentarios (
+    CommentID INT AUTO_INCREMENT PRIMARY KEY,
+    ContenidoComentario VARCHAR(255) NOT NULL,
+    FechaHoraComentario DATETIME NOT NULL,
+    UserID INT,
+    TaskID INT,
+    FOREIGN KEY (UserID) REFERENCES Usuarios(UserID),
+    FOREIGN KEY (TaskID) REFERENCES Tareas(TaskID)
+);
+
+-----------------------------------------------------------------------------------------------------------------------
+INSERT INTO Usuarios (Nombre, CorreoElectronico, Contrasenia) VALUES
+('Juan Pérez', 'juan.perez@example.com', 'abcd1234'),
+('María Gómez', 'maria.gomez@example.com', '4567efgh'),
+('Pedro Ramirez', 'pedro.ramirez@example.com', 'qwerty12'),
+('Laura Fernandez', 'laura.fernandez@example.com', 'pass1234'),
+('Carlos López', 'carlos.lopez@example.com', 'mypassword');
+
+
+INSERT INTO Proyectos (NombreProyecto, Descripcion, FechaInicio, FechaFinalizacion) VALUES
+('Proyecto A', 'Desarrollo de una aplicación web', '2023-08-10', '2023-11-30'),
+('Proyecto B', 'Rediseño de logotipo', '2023-09-05', '2023-10-15'),
+('Proyecto C', 'Investigación de mercado', '2023-07-20', '2023-09-30');
+
+
+INSERT INTO Tareas (DescripcionTarea, FechaCreacion, FechaVencimiento, Estado, ProjectID) VALUES
+('Diseño de interfaz', '2023-08-12', '2023-09-15', 'Pendiente', 1),
+('Implementación de funcionalidades', '2023-09-01', '2023-11-20', 'En Progreso', 1),
+('Elaboración de informe de resultados', '2023-07-25', '2023-09-25', 'Pendiente', 3),
+('Revisión de documentos', '2023-09-10', '2023-09-30', 'En Progreso', 3),
+('Creación de prototipo', '2023-09-07', '2023-10-10', 'Completada', 2);
+
+
+INSERT INTO Comentarios (ContenidoComentario, FechaHoraComentario, UserID, TaskID) VALUES
+('Buen trabajo', '2023-08-20 10:30:00', 1, 1),
+('Avancen con el desarrollo', '2023-09-03 15:45:00', 2, 1),
+('¿Alguien necesita ayuda?', '2023-07-30 11:20:00', 3, 3),
+('Excelente progreso', '2023-09-15 14:10:00', 4, 4),
+('Listo para la presentación', '2023-10-05 09:00:00', 5, 5);
